@@ -14,11 +14,11 @@
                Rating : <span [class]="rate" *ngFor="let rate of rating"></span>
                {{product.rating.rate}}
                 <div class="d-flex">
-                    <div class="text-center"><a class="btn btn-outline-danger mt-auto mx-3" routerLink="/products/wish-list">Wish list</a></div>
-                    <a class="btn btn-outline-success flex-shrink-0" routerLink="/products/cart">
+                    <div class="text-center"><a class="btn btn-outline-danger mt-auto mx-3" (click)="addToWidhlist(product)">Wish list</a></div>
+                    <button class="btn btn-outline-success flex-shrink-0" (click)="addToCart(product)">
                         <i class="bi-cart-fill me-1"></i>
                         Add to cart
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>

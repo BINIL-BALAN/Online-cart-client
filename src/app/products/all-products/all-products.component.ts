@@ -17,7 +17,9 @@ export class AllProductsComponent implements OnInit {
       (result:any)=>{
         console.log(result.error.message);
       })
-      this.searchKey=this.httpapi.searchKey
+      this.httpapi.searchKey.subscribe((result:string)=>{
+        this.searchKey=result
+      })
    }
 
 }

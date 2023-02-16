@@ -1,4 +1,4 @@
-<div class="container mt-5 pt-5">
+<div class="container mt-5 pt-5" *ngIf="cartItems.length==0">
     <div class="row">
         <div class="col text-center">
             <img height="300px" src="https://www.qrcardboard.com/images/cart.gif?v=01" alt="Empty cart">
@@ -8,7 +8,7 @@
     </div>
 </div>
 
-<div class="container-fluid my-5 pt-5">
+<div class="container-fluid my-5 pt-5" *ngIf="cartItems.length != 0">
  <div class="row mx-4">
         <div class="col-lg-7 border rounded py-3">
             <table class="table">
@@ -22,30 +22,87 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th>1</th>
-                        <th><img width="100px" height="100px" src="https://cdn-images.farfetch-contents.com/16/67/98/25/16679825_36070196_300.jpg" alt="product image"></th>
+                    <tr *ngFor="let item of cartItems;let i=index">
+                        <th>{{i+1}}</th>
+                        <th><img width="100px" height="100px" [src]="item.image" [alt]="item.title.slice(0,15)+'...'"></th>
                         <th><input type="text" name="" class="form-control" value="1" style="width: 3rem;"></th>
-                        <th>3000</th>
-                        <th><a class="btn text-danger"><i class="fa fa-trash-can"></i></a></th>
+                        <th>{{item.price}}</th>
+                        <th><button class="btn text-danger" (click)="deleteItem(i)"><i class="fa fa-trash-can"></i></button></th>
                     </tr>
                 </tbody>
             </table>
             <div class="d-flex justify-content-end mt-4">
-                <button class="btn btn-outline-danger mx-4">Empty cart</button>
+                <button class="btn btn-outline-danger mx-4" (click)="emptyCart()">Empty cart</button>
                 <button routerLink="" class="btn btn-outline-primary mx-4">Shop more</button>
                </div>
         </div>
         <div class="col-lg-1"></div>
         <div class="col-lg-4 border rounded py-3 h-25">
-          Discount : 
-          <div class="text-center"> <h4>Total cost : <strong class="text-primary text-center">3000</strong></h4> </div>
+          Total : <span class="text-primary">{{totalPrice}}</span> <br>
+          Discount : <span class="text-sucess">{{discount}}</span>
+          <div class="text-center"> <h4>Total cost : <strong class="text-primary text-center">{{discountTotal}}</strong></h4> </div>
           <hr>
            
            <div class="d-flex justify-content-between mt-5">
-            <a class="nav-link text-primary"> <i class="fa-solid fa-tag"></i> offers</a>
-            <button class="btn btn-success">Checkout</button>
+            <a class="btn btn-link nav-link text-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-tag"></i> offers</a>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#checkoutModel">Checkout</button>
            </div>
         </div>
  </div>
 </div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title text-success fs-5" id="staticBackdropLabel"> <i class="fa-solid fa-tag"></i> Couons</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+       <div class="dflex align-items-center" *ngIf="totalPrice>0 && totalPrice<10"> 
+        <h6 class="text-primary" (click)="discound3precentage()">*All users can apply*</h6>
+    </div>
+       <div class="dflex align-items-center" *ngIf="totalPrice>10 && totalPrice<100">
+        <h6 class="text-primary" (click)="discound10precentage()"> *Special offer*</h6>
+       </div>
+       <div class="dflex align-items-center" *ngIf="totalPrice>100">
+        <h6 class="text-primary" (click)="discound15precentage()">*Exciting offer* </h6>
+       </div>
+        </div>
+        <!-- <div class="modal-footer">
+           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Understood</button> 
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="checkoutModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title text-success fs-5" id="staticBackdropLabel"> <i class="fa-solid fa-tag"></i> Place order</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        <h6>Customer details</h6>
+       <form action="">
+       <input type="text" class="form-control mt-3" placeholder="Name">
+       <textarea type="text" class="form-control mt-3" placeholder="Address"></textarea>
+       <input type="text" class="form-control mt-3" placeholder="Pincode">
+       <input type="text" class="form-control mt-3" placeholder="Mobile">
+    </form>
+    <hr>
+    <form action="">
+        <h6>payment details</h6>
+        <input type="text" class="form-control mt-3" placeholder="Upi id">
+     </form>
+        </div>
+        <div class="modal-footer">
+           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="checkOut()">Payment</button> 
+          <h5 class="text-success">{{checkOutMessage}}</h5>
+        </div> 
+      </div>
+    </div>
+  </div>

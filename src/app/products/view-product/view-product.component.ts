@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiServiceService } from 'src/app/services/api-service.service';
+import { CartService } from 'src/app/services/cart.service';
 
 @Component({
   selector: 'app-view-product',
@@ -11,7 +12,7 @@ export class ViewProductComponent implements OnInit{
     id:string=''
     product:any
     rating:string [] = []
-     constructor (private router:ActivatedRoute,private api:ApiServiceService){}
+     constructor (private router:ActivatedRoute,private api:ApiServiceService,private cartService:CartService){}
   ngOnInit(): void {
      this.router.params.subscribe((result:any)=>{
       this.id=result.id
@@ -28,6 +29,17 @@ export class ViewProductComponent implements OnInit{
       })
     
   }
-
-
+  addToWidhlist(product:any){
+    this.api.addToWishlist(product).subscribe((result:any)=>{
+      alert(result.message) 
+    },
+    (result)=>{
+      alert(result.error.message);
+      
+    }
+    )
+  }
+  addToCart(items:any){
+   this.cartService.addTocart(items)
+  }
 }
